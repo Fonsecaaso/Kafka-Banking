@@ -20,4 +20,4 @@ Observações: esse é um estudo preliminar e talvez a entrega final não seja 1
 com tal, por exemplo, se não houver tempo hábil não iremos implementar o serviço de
 analytics, priorizando os serviços de processamento de requisições.
 
-![](https://file%2B.vscode-resource.vscode-cdn.net/home/mateus/Downloads/Diagramas-trabalho%20Kafka.drawio%284%29.png?version%3D1679937097814)
+![Diagramas-trabalho Kafka drawio(4)](https://user-images.githubusercontent.com/26654992/228016119-16947482-0e91-47ac-a62a-0f04c1596891.png)
