@@ -13,15 +13,7 @@ var connection = mysql.createConnection({
     password: "Password@1"
   });
 
-const consumer = new Consumer(
-  client,
-  [
-    { topic: topic, partitions: 1 }
-  ],
-  {
-    autoCommit: true
-  }
-);
+const consumer = new Consumer(client,[{ topic: topic, partitions: 1 }],{autoCommit: true});
 
 connection.connect();
 
