@@ -14,12 +14,13 @@ const rl = readline.createInterface({
 });
 
 var recursiveAsyncReadLine = function () {
-  rl.question('Digite o nome de quem receberá o deposito e o valor (separados por um espaço): ', function (msg) {
+  rl.question('\ninsira: ', function (msg) {
     values = msg.split(" ")
     const message = {
-        key: 'deposito',
-        name: values[0],
-        amount: values[1]
+        key: values[0],
+        amount: values[1],
+        name1: values[2],
+        name2: values.length==4? values[3]:''
     };
 
     producer.send([{ topic: topic, messages: [JSON.stringify(message)] }], function (err, data) {
