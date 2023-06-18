@@ -4,7 +4,7 @@ const mysql = require('mysql');
 const client = new kafka.KafkaClient({ kafkaHost: 'localhost:9092' });
 const Consumer = kafka.Consumer;
 
-const topic = 'deposit_topic2';
+
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -13,15 +13,17 @@ var connection = mysql.createConnection({
     password: "Password@1"
   });
 
+const topic = 'topico';
 const consumer = new Consumer(client,[{ topic: topic, partitions: 1 }],{autoCommit: true});
 
 connection.connect();
 
 consumer.on('message', function (message) {
   const msg = JSON.parse(message.value);
+  console.log("msg.key: ",msg.operation);
 
 
-  if(msg.key == 'deposit')
+  if(msg.operation == 'deposit')
     deposit(msg);
   else if(msg.key == 'transfer')
     transfer(msg);

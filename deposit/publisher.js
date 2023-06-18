@@ -4,7 +4,7 @@ const readline = require('readline');
 
 const client = new kafka.KafkaClient({ kafkaHost: 'localhost:9092' });
 const Producer = kafka.Producer;
-const topic = 'deposit_topic2';
+const topic = 'topico';
 
 const producer = new Producer(client);
 
@@ -17,7 +17,7 @@ var recursiveAsyncReadLine = function () {
   rl.question('\ninsira: ', function (msg) {
     values = msg.split(" ")
     const message = {
-        key: values[0],
+        operation: values[0],
         amount: values[1],
         name1: values[2],
         name2: values.length==4? values[3]:''

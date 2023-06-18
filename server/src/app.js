@@ -5,12 +5,17 @@ import mongoose from 'mongoose';
 
 //Schemas
 import Client from './models/client.js';
+import Client3 from './models/client3.js';
 
 //Routes
 import indexRoute from './routes/index-route.js';
 import clientRoute from './routes/client-route.js';
 
 const app = express();
+
+import runConsumer from './consumers/transactions-consumer.js';
+
+runConsumer();
 
 // Connect to MongoDB instance:
 mongoose.connect('mongodb+srv://user:1234@cluster0.7woti.mongodb.net/kafka-banking?retryWrites=true&w=majority');

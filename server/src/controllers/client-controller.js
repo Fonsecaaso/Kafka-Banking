@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const Client = mongoose.model('Client')
+const Client = mongoose.model('Client3')
 
 const controller = {}
 
@@ -8,6 +8,7 @@ controller.getAllClients = async (req,res)=>{
     try{
         const data = await Client
             .find({}, '_id name amount')
+        console.log(data)
         res.status(200).send(data)
     } catch (e){
         res.status(400).send(e)
