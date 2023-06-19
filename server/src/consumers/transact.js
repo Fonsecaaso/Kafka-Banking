@@ -28,10 +28,8 @@ handle.transfer = async (msg)=> {
     const user = msg.name1;
     const amount = msg.amount;
 
-
     const user_data = await Client.findOne({name:user}, '_id name amount')
   
-
     if (user_data==null){
       await Client.create({name: user, amount: parseInt(amount), job: "musician"})
       console.log("usuario criado")
@@ -42,7 +40,6 @@ handle.transfer = async (msg)=> {
     const newamount = parseInt(user_data.amount) + parseInt(amount)
     await Client.findOneAndUpdate({name: user}, {amount: newamount})
     console.log("atualizado")
-  
     };
 
 export default handle;
