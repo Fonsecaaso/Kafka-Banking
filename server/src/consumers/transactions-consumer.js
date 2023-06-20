@@ -4,7 +4,7 @@ import handle from './transact.js'
 const client = new kafka.KafkaClient({ kafkaHost: 'localhost:9092' });
 const Consumer = kafka.Consumer;
 const topic = 'topico';
-const consumer = new Consumer(client, [{ topic: topic, partitions: 1 }], { autoCommit: false });
+const consumer = new Consumer(client, [{ topic: topic, partitions: 1 }], { autoCommit: true });
 
 async function runConsumer() {
   try {
