@@ -1,7 +1,19 @@
 import mongoose from "mongoose";
+import kafka from 'kafka-node';
 const Client = mongoose.model('Client3')
 
 const handle = {}
+const client = new kafka.KafkaClient({ kafkaHost: 'kafka:29092' });
+const producer = new kafka.Producer(client);
+
+function publish(msg, id){
+  var message = "[id:"+parseInt(id)+"] "+msg
+  console.log(message)
+  producer.send([{ topic: 'response', messages: [JSON.stringify(message)] }], function (err, data) {
+    if (err) console.log('Erro: ' + err);
+  });
+}
+
 
 handle.transfer = async (msg)=> {
     const origin = msg.name1;
@@ -12,34 +24,43 @@ handle.transfer = async (msg)=> {
     const userDestination = await Client.findOne({name:destination}, '_id name amount job')
   
     if (userOrigin==null ||  userDestination==null){
-      console.log("usuário inexistente")
-      return
+      publish("usuário inexistente", msg.id)
+    }else{
+      const originAmount = parseInt(userOrigin.amount) - parseInt(amount)
+      const destinationAmount = parseInt(userDestination.amount) + parseInt(amount)
+      await Client.findOneAndUpdate({name: origin}, {amount: originAmount})
+      await Client.findOneAndUpdate({name: destination}, {amount: destinationAmount})
+      publish("usuario " +origin+ " atualizado, saldo: "+originAmount+" - "+"usuario " +destination+ " atualizado, saldo: "+destinationAmount, msg.id) 
     }
-    console.log("atualizando ...")
-    const originAmount = parseInt(userOrigin.amount) - parseInt(amount)
-    const destinationAmount = parseInt(userDestination.amount) + parseInt(amount)
-    await Client.findOneAndUpdate({name: origin}, {amount: originAmount})
-    await Client.findOneAndUpdate({name:destination}, {amount: destinationAmount})
-    console.log("atualizado")
-
   };
 
-  handle.deposit = async (msg)=> {
-    const user = msg.name1;
-    const amount = msg.amount;
+handle.deposit = async (msg)=> {
+  const user = msg.name1;
+  const amount = msg.amount;
 
-    const user_data = await Client.findOne({name:user}, '_id name amount')
-  
-    if (user_data==null){
-      await Client.create({name: user, amount: parseInt(amount), job: "musician"})
-      console.log("usuario criado")
-      return
-    }
+  const user_data = await Client.findOne({name:user}, '_id name amount')
 
-    console.log("atualizando ...")
+  if (user_data==null){
+    await Client.create({name: user, amount: parseInt(amount), job: "musician"})
+    publish("usuario " +user+ " criado, saldo: "+amount, msg.id)
+  }else{
     const newamount = parseInt(user_data.amount) + parseInt(amount)
     await Client.findOneAndUpdate({name: user}, {amount: newamount})
-    console.log("atualizado")
-    };
+    publish("usuario " +user+ " atualizado, saldo: "+newamount, msg.id)
+  }
+};
+
+handle.extract = async (msg)=> {
+  const user = msg.name1;
+
+  const user_data = await Client.findOne({name:user}, '_id name amount')
+
+  if (user_data==null){
+    publish("usuario inexistente", msg.id)
+  }else{
+    publish(user_data.name + " tem em conta " + user_data.amount, msg.id)
+  }
+
+};
 
 export default handle;
