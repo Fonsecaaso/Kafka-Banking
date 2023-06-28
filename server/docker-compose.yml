@@ -43,7 +43,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - 4053:4053
+      - '9053:9053'
     volumes:
       - .:/usr/src/app
     environment:
