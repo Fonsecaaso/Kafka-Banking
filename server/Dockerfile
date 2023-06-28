@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Porta em que o servidor estará escutando
-EXPOSE 9043
+EXPOSE 9053
 
 # Comando para iniciar o servidor
 CMD ["npx", "nodemon", "./bin/server.js"]
